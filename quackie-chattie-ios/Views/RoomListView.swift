@@ -10,11 +10,13 @@ import SwiftUI
 import FirebaseAuth
 
 struct RoomsListView: View {
-
     @State var roomName = ""
     @State private var rooms = [String]()
     @EnvironmentObject var viewModel: AuthenticationViewModel
-        
+    
+    let mSock = SocketHandler.shared.getSocket()
+    let user = Auth.auth().currentUser
+
     var body: some View {
         VStack {
             HStack {
@@ -98,13 +100,7 @@ struct RoomsListView: View {
         .background(Color.bgColor)
     }
     
-    private func logOut() {
-        viewModel.signOut()
-    }
-    
     private func populateRooms() {
-        let mSock = SocketHandler.shared.getSocket()
-        let user = Auth.auth().currentUser
         if let username = user?.displayName {
             if !username.isEmpty {
                 if let userID = user?.uid {
@@ -130,9 +126,6 @@ struct RoomsListView: View {
 
     
     private func joinRoom() {
-        let mSock = SocketHandler.shared.getSocket()
-        let user = Auth.auth().currentUser
-        
         if let username = user?.displayName {
             if !username.isEmpty {
                 let initData = Rooms(room_id: "", room_name: roomName, user_name: username)
@@ -147,6 +140,15 @@ struct RoomsListView: View {
                 }
             }
         }
+    }
+    
+    private func logOut() {
+        viewModel.signOut()
+        closeSockets()
+    }
+    
+    private func closeSockets() {
+        mSock.off("populate_chat_list")
     }
 }
 

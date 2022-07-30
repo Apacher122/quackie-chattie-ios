@@ -82,13 +82,13 @@ struct ChatMessageRow: View {
 
 struct ChatMessage_Previews: PreviewProvider {
     private static let chatMessage = Message(
-        sender: "Fuck you",
-        message_text: "FACK YAO",
+        sender: "Bob",
+        message_text: "Come stai oggi?",
         room_name: "YO MAMA")
     
     private static let chatMessage1 = Message(
-        sender: "Fuck you",
-        message_text: "FACK YAO MADUH BITCH",
+        sender: "Mark",
+        message_text: "Sono stanco a basta",
         room_name: "YO MAMA")
     
     static var previews: some View {

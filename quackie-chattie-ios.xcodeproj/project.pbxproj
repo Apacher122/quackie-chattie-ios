@@ -18,6 +18,8 @@
 		3241453728937EBA00118CDB /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3241453628937EBA00118CDB /* GoogleSignInSwift */; };
 		3241457128937F4A00118CDB /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 3241457028937F4A00118CDB /* SocketIO */; };
 		3241457428937FA000118CDB /* SystemPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 3241457328937FA000118CDB /* SystemPackage */; };
+		32AB6C742895101D00FEB658 /* SoundModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AB6C732895101D00FEB658 /* SoundModel.swift */; };
+		32AB6C772895112100FEB658 /* quack.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 32AB6C762895112100FEB658 /* quack.mp3 */; };
 		32D6753B2893864800436C3E /* modeseven.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 32D675392893864800436C3E /* modeseven.ttf */; };
 		32D675402893865B00436C3E /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D6753D2893865B00436C3E /* ChatService.swift */; };
 		32D675412893865B00436C3E /* SocketHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D6753E2893865B00436C3E /* SocketHandler.swift */; };
@@ -70,6 +72,8 @@
 		324144E428937BEE00118CDB /* ViewRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewRouter.swift; sourceTree = "<group>"; };
 		324144E628937BF800118CDB /* QuackieChattieApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuackieChattieApp.swift; sourceTree = "<group>"; };
 		324144F928937C4300118CDB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		32AB6C732895101D00FEB658 /* SoundModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundModel.swift; sourceTree = "<group>"; };
+		32AB6C762895112100FEB658 /* quack.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = quack.mp3; sourceTree = "<group>"; };
 		32D675392893864800436C3E /* modeseven.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = modeseven.ttf; sourceTree = "<group>"; };
 		32D6753D2893865B00436C3E /* ChatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		32D6753E2893865B00436C3E /* SocketHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketHandler.swift; sourceTree = "<group>"; };
@@ -185,9 +189,18 @@
 			path = "quackie-chattie-iosUITests";
 			sourceTree = "<group>";
 		};
+		32AB6C75289510B500FEB658 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				32AB6C762895112100FEB658 /* quack.mp3 */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		32D675352893864800436C3E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				32AB6C75289510B500FEB658 /* Sounds */,
 				32D6756528938CF900436C3E /* Extensions */,
 				32D675382893864800436C3E /* Fonts */,
 			);
@@ -243,6 +256,7 @@
 				32D675572893867200436C3E /* Rooms.swift */,
 				32D675582893867200436C3E /* Enum.swift */,
 				32D675592893867200436C3E /* InitData.swift */,
+				32AB6C732895101D00FEB658 /* SoundModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -383,6 +397,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				324144C128937BAE00118CDB /* Preview Assets.xcassets in Resources */,
+				32AB6C772895112100FEB658 /* quack.mp3 in Resources */,
 				32D675822894369E00436C3E /* GoogleService-Info.plist in Resources */,
 				324144FA28937C4300118CDB /* Assets.xcassets in Resources */,
 				32D6753B2893864800436C3E /* modeseven.ttf in Resources */,
@@ -417,6 +432,7 @@
 				32D6756728938CF900436C3E /* Font+Custom.swift in Sources */,
 				32D6755C2893867200436C3E /* User.swift in Sources */,
 				32D6754D2893866900436C3E /* CreateUserNameView.swift in Sources */,
+				32AB6C742895101D00FEB658 /* SoundModel.swift in Sources */,
 				32D6754E2893866900436C3E /* ChatMessageRow.swift in Sources */,
 				32D6755D2893867200436C3E /* Rooms.swift in Sources */,
 				32D675632893867700436C3E /* AppDelegate.swift in Sources */,

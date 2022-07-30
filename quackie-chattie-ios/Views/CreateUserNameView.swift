@@ -12,6 +12,8 @@ import FirebaseAuth
 struct CreateUserNameView: View {
     @State var username = ""
     @EnvironmentObject var viewModel: AuthenticationViewModel
+    let mSock = SocketHandler.shared.getSocket()
+    let user = Auth.auth().currentUser
     
     var body: some View {
         VStack {
@@ -70,9 +72,6 @@ struct CreateUserNameView: View {
     }
     
     private func sendUsername() {
-        let mSock = SocketHandler.shared.getSocket()
-        let user = Auth.auth().currentUser
-		
 		// Request to update username here
 		let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
 		changeRequest?.displayName = username
@@ -87,6 +86,7 @@ struct CreateUserNameView: View {
                 mSock.on("NEW_USER") {data, ack in
                     print("New user")
                     mSock.emit("signUp", jData)
+                    closeSocketListeners()
                     viewModel.goToRooms()
                 }
                 mSock.on("USER_EXISTS") {data, ack in
@@ -97,6 +97,11 @@ struct CreateUserNameView: View {
                 print(error)
             }
         }
+    }
+    
+    private func closeSocketListeners() {
+        mSock.off("NEW_USER")
+        mSock.off("USER_EXISTS")
     }
 }
 

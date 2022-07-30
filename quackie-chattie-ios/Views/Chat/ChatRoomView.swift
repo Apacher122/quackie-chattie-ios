@@ -16,7 +16,11 @@ struct ChatRoomView: View {
     @EnvironmentObject private var store: AppStore
     @State private var messages: [Message] = []
     @State private var subscriptions: Set<AnyCancellable> = []
+    @State private var msg = Message(sender: "", message_text: "", room_name: "")
+    
     let username = Auth.auth().currentUser?.displayName
+    let mSock = SocketHandler.shared.getSocket()
+    let user = Auth.auth().currentUser
     
     var body: some View {
         ZStack {
@@ -85,16 +89,12 @@ struct ChatRoomView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .background(Color.bgColor)
         }
-        .onAppear(perform: populateMessages)
         .onAppear(perform: updateMessages)
         .onAppear(perform: fetchPastMessages)
     }
     
     
     private func leaveRoom() {
-        let mSock = SocketHandler.shared.getSocket()
-        let user = Auth.auth().currentUser
-        
         if let username = user?.displayName {
             let roomName = viewModel.room_name
             if !username.isEmpty {
@@ -102,6 +102,7 @@ struct ChatRoomView: View {
                 do {
                     let jData = try JSONEncoder().encode(initData)
                     mSock.emit("leave_room", jData)
+                    closeSocketListeners()
                     viewModel.goToRooms()
                 } catch {
                     print(error)
@@ -113,6 +114,7 @@ struct ChatRoomView: View {
     private func sendMessage(message: String) {
         // hide keyboard upon sending message
         hideKeyboard()
+        SoundModel.instance.play()
         let user = Auth.auth().currentUser
         if let username = user?.displayName {
             if !username.isEmpty {
@@ -128,24 +130,7 @@ struct ChatRoomView: View {
         }.store(in: &subscriptions)
     }
     
-    // breaks here
-    private func populateMessages() {
-        print("New Message Received")
-        let mSock = SocketHandler.shared.getSocket()
-        do {
-            mSock.once("update") { data, ack in
-                print("GETTING NEW MESSAGES")
-                let stuff = data[0] as! String
-                guard let json = try? JSONSerialization.jsonObject(with: stuff.data(using: .utf8)!, options: []) as? [String: Any] else {return}
-                let temp = Message(sender: json["uName"] as! String, message_text: json["content"] as! String, room_name: json["rName"] as! String)
-                store.state.chatService.getUpdates(temp: temp)
-            }
-        }
-    }
-    
     private func fetchPastMessages() {
-        let mSock = SocketHandler.shared.getSocket()
-        let user = Auth.auth().currentUser
         if let username = user?.displayName {
             if !username.isEmpty {
                 let roomName = viewModel.room_name
@@ -153,7 +138,7 @@ struct ChatRoomView: View {
                 do {
                     let jData = try JSONEncoder().encode(initData)
                     mSock.emit("getMessages", jData)
-                    mSock.once("populateMessages") { data, ack in
+                    mSock.on("populateMessages") { data, ack in
                         print(type(of: data[0]))
                         let stuff = data[0] as! String
                         guard let json = try? JSONSerialization.jsonObject(with: stuff.data(using: .utf8)!, options: []) as? [String: Any] else { return }
@@ -165,6 +150,10 @@ struct ChatRoomView: View {
                 }
             }
         }
+    }
+    
+    private func closeSocketListeners() {
+        mSock.off("populateMessages")
     }
 }
 

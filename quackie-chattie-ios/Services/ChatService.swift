@@ -16,11 +16,13 @@ final class ChatService: ObservableObject {
     static let mSock = SocketHandler.shared.getSocket()
     
     private let messageSubject = PassthroughSubject<Message, Never>()
-    
+    private let mSock = SocketHandler.shared.getSocket()
+
     let receivedMessage: AnyPublisher<Message, Never>
     
     init() {
         receivedMessage = messageSubject.eraseToAnyPublisher()
+        self.getUpdates()
     }
     
     func send(rName: String, text: String, user: String) {
@@ -41,14 +43,22 @@ final class ChatService: ObservableObject {
                 }
     }
     
-    func getUpdates(temp: Message) {
-        let message = temp
-        DispatchQueue.global().async(
-        execute: {
-            DispatchQueue.main.sync {
-                self.messageSubject.send(message)
+    func getUpdates() {
+        print("Listening for new messages")
+        do {
+            mSock.on("update") { data, ack in
+                print("GETTING NEW MESSAGES")
+                SoundModel.instance.play()
+                let stuff = data[0] as! String
+                guard let json = try? JSONSerialization.jsonObject(with: stuff.data(using: .utf8)!, options: []) as? [String: Any] else {return}
+                let temp = Message(sender: json["uName"] as! String, message_text: json["content"] as! String, room_name: json["rName"] as! String)
+                DispatchQueue.global().async(
+                execute: {
+                    DispatchQueue.main.sync {
+                        self.messageSubject.send(temp)
+                    }
+                })
             }
-        })
-
+        }
     }
 }

@@ -19,6 +19,7 @@ struct CustomColors {
 struct LoginView: View {
     @State private var chatContent = ""
     @EnvironmentObject var viewModel: AuthenticationViewModel
+
     
     var body: some View {
         VStack {
